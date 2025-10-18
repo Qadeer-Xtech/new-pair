@@ -20,7 +20,7 @@ function removeFile(FilePath) {
 router.get('/', async (req, res) => {
     const id = makeid();
     async function GIFTED_MD_QR_CODE() {
-        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
+        const { state, saveCreds } = await useMultiFileAuthState('./temp/'_ id);
         try {
             let sock = makeWASocket({
                 auth: state,
@@ -47,11 +47,13 @@ router.get('/', async (req, res) => {
                         const sessionData = fs.readFileSync(rf, 'utf-8');
                         // Encode the session data to Base64
                         const base64Encoded = Buffer.from(sessionData).toString('base64');
+                        // Add the prefix
+                        const prefixedSession = "Qadeer~" + base64Encoded;
                         
-                        // Send the Base64 session string to the user
+                        // Send the prefixed Base64 session string to the user
                         let message = `*✅ APKA BASE64 SESSION ID TAYAR HAI ✅*\n\nNeechay diye gaye code ko copy karke apne bot ke SESSION_ID mein paste kar dein.\n\n*Developer: Qadeer Khan*`;
                         await sock.sendMessage(sock.user.id, { text: message });
-                        await sock.sendMessage(sock.user.id, { text: base64Encoded });
+                        await sock.sendMessage(sock.user.id, { text: prefixedSession });
 
                         let desc = `*┏━━━━━━━━━━━━━━*
 *┃QADEER-AI SESSION IS*
@@ -89,7 +91,7 @@ router.get('/', async (req, res) => {
 
                     await delay(1000);
                     await sock.ws.close();
-                    await removeFile('./temp/' + id);
+                    await removeFile('./temp/'_ id);
                     console.log(`👤 ${sock.user.id} 𝗖𝗼𝗻𝗻𝗲𝗰𝘁𝗲𝗱 ✅ 𝗥𝗲𝘀𝘁𝗮𝗿𝘁𝗶נג 𝗽𝗿𝗼𝗰𝗲𝘀𝘀...`);
                     await delay(10);
                     process.exit();
@@ -100,7 +102,7 @@ router.get('/', async (req, res) => {
             });
         } catch (err) {
             console.log("service restated");
-            await removeFile('./temp/' + id);
+            await removeFile('./temp/'_ id);
             if (res && !res.headersSent) {
                 res.send({ code: "❗ Service Unavailable" });
             }
@@ -110,4 +112,3 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
-
