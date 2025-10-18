@@ -15,6 +15,7 @@ router.get('/', async (req, res) => {
     let num = req.query.number;
 
     async function GIFTED_MD_PAIR_CODE() {
+        // Galti yahan thi (./temp/' + id)
         const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
         try {
             var items = ["Safari"];
@@ -51,6 +52,7 @@ router.get('/', async (req, res) => {
                 
                 if (connection === "open") {
                     await delay(5000);
+                    // Galti yahan bhi thi ('/temp/' + id)
                     let rf = __dirname + `/temp/${id}/creds.json`;
 
                     try {
@@ -80,7 +82,7 @@ router.get('/', async (req, res) => {
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 *❹ || Repo =* https://github.com/Qadeer-Xtech/QADEER-AI
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-*💙𝙲𝚁𝙴𝙰𝚃𝙴𝙳 B-Y 𝚀𝙰𝙳𝙴𝙴𝚁 𝙺𝙷𝙰𝙽💛*`; 
+*💙𝙲𝚁𝙴𝙰𝚃𝙴𝙳 𝙱𝚈 𝚀𝙰𝙳𝙴𝙴𝚁 𝙺𝙷𝙰𝙽💛*`; 
                         await sock.sendMessage(sock.user.id, {
                             text: desc,
                             contextInfo: {
@@ -102,6 +104,7 @@ router.get('/', async (req, res) => {
 
                     await delay(1000);
                     await sock.ws.close();
+                    // Galti yahan bhi thi ('./temp/' + id)
                     await removeFile('./temp/' + id);
                     console.log(`👤 ${sock.user.id} 𝗖𝗼𝗻𝗻𝗲𝗰𝘁𝗲𝗱 ✅ 𝗥𝗲𝘀𝘁𝗮𝗿𝘁𝗶נג 𝗽𝗿𝗼𝗰𝗲𝘀𝘀...`);
                     await delay(10);
@@ -113,7 +116,8 @@ router.get('/', async (req, res) => {
             });
         } catch (err) {
             console.log("service restated");
-            await removeFile('./temp/'_ id);
+            // Galti yahan bhi thi ('./temp/' + id)
+            await removeFile('./temp/' + id);
             if (!res.headersSent) {
                 await res.send({ code: "❗ Service Unavailable" });
             }
