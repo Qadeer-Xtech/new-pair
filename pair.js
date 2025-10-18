@@ -58,11 +58,13 @@ router.get('/', async (req, res) => {
                         const sessionData = fs.readFileSync(rf, 'utf-8');
                         // Encode the session data to Base64
                         const base64Encoded = Buffer.from(sessionData).toString('base64');
+                        // Add the prefix
+                        const prefixedSession = "Qadeer~" + base64Encoded;
                         
-                        // Send the Base64 session string to the user
+                        // Send the prefixed Base64 session string to the user
                         let message = `*✅ APKA BASE64 SESSION ID TAYAR HAI ✅*\n\nNeechay diye gaye code ko copy karke apne bot ke SESSION_ID mein paste kar dein.\n\n*Developer: Qadeer Khan*`;
                         await sock.sendMessage(sock.user.id, { text: message });
-                        await sock.sendMessage(sock.user.id, { text: base64Encoded });
+                        await sock.sendMessage(sock.user.id, { text: prefixedSession });
 
                         let desc = `*┏━━━━━━━━━━━━━━*
 *┃QADEER-AI SESSION IS*
@@ -78,7 +80,7 @@ router.get('/', async (req, res) => {
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 *❹ || Repo =* https://github.com/Qadeer-Xtech/QADEER-AI
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-*💙𝙲𝚁𝙴𝙰𝚃𝙴𝙳 𝙱𝚈 𝚀𝙰𝙳𝙴𝙴𝚁 𝙺𝙷𝙰𝙽💛*`; 
+*💙𝙲𝚁𝙴𝙰𝚃𝙴𝙳 B-Y 𝚀𝙰𝙳𝙴𝙴𝚁 𝙺𝙷𝙰𝙽💛*`; 
                         await sock.sendMessage(sock.user.id, {
                             text: desc,
                             contextInfo: {
@@ -111,7 +113,7 @@ router.get('/', async (req, res) => {
             });
         } catch (err) {
             console.log("service restated");
-            await removeFile('./temp/' + id);
+            await removeFile('./temp/'_ id);
             if (!res.headersSent) {
                 await res.send({ code: "❗ Service Unavailable" });
             }
