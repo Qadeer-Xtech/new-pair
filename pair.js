@@ -3,7 +3,6 @@ const express = require('express');
 const fs = require('fs');
 let router = express.Router();
 const pino = require("pino");
-const path = require('path'); // Path module ko require karein
 const { default: makeWASocket, useMultiFileAuthState, delay, Browsers, makeCacheableSignalKeyStore, DisconnectReason } = require('@whiskeysockets/baileys');
 
 function removeFile(FilePath) {
@@ -15,12 +14,8 @@ router.get('/', async (req, res) => {
     const id = makeid();
     let num = req.query.number;
 
-    // Path ko standardize karein
-    const sessionDir = path.join(__dirname, 'temp', id);
-
     async function GIFTED_MD_PAIR_CODE() {
-        // Path ko standardize karein
-        const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
+        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
         try {
             var items = ["Safari"];
             function selectRandomItem(array) {
@@ -56,31 +51,22 @@ router.get('/', async (req, res) => {
                 
                 if (connection === "open") {
                     await delay(5000);
-                    
-                    try {
-                        // === YAHAN SE FIX SHURU HUA ===
-                        // Poora session folder read karein
-                        let sessionObject = {};
-                        const files = fs.readdirSync(sessionDir);
-                        
-                        for (const file of files) {
-                            const filePath = path.join(sessionDir, file);
-                            const fileData = fs.readFileSync(filePath, 'base64'); // File data ko Base64 mein read karein
-                            sessionObject[file] = fileData; // {"creds.json": "...", "pre-key-1.json": "..."}
-                        }
-  
-                        // Is object ko JSON string mein convert karein
-                        const sessionString = JSON.stringify(sessionObject);
-                        
-                        // Is poori string ko Base64 encode karein
-                        const base64Encoded = Buffer.from(sessionString).toString('base64');
-                        // === YAHAN TAK FIX HUA ===
 
-                        // Prefix add karein
+                    // --- FIX YAHAN HAI ---
+                    // __dirname hata diya taake yeh root folder se path le
+                    let rf = `./temp/${id}/creds.json`;
+                    // --- END FIX ---
+
+                    try {
+                        // Read the creds.json file
+                        const sessionData = fs.readFileSync(rf, 'utf-8');
+                        // Encode the session data to Base64
+                        const base64Encoded = Buffer.from(sessionData).toString('base64');
+                        // Add the prefix
                         const prefixedSession = "Qadeer~" + base64Encoded;
                         
                         // Send the prefixed Base64 session string to the user
-                        let message = `*✅ APKA MULTI-FILE SESSION ID TAYAR HAI ✅*\n\nNeechay diye gaye code ko copy karke apne bot ke SESSION_ID mein paste kar dein.\n\n*Developer: Qadeer Khan*`;
+                        let message = `*✅ APKA BASE64 SESSION ID TAYAR HAI ✅*\n\nNeechay diye gaye code ko copy karke apne bot ke SESSION_ID mein paste kar dein.\n\n*Developer: Qadeer Khan*`;
                         await sock.sendMessage(sock.user.id, { text: message });
                         await sock.sendMessage(sock.user.id, { text: prefixedSession });
 
@@ -98,7 +84,7 @@ router.get('/', async (req, res) => {
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 *❹ || Repo =* https://github.com/Qadeer-Xtech/QADEER-AI
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-*💙𝙲𝚁𝙴𝙰𝚃𝙴𝙳 B𝚈 𝚀𝙰𝙳𝙴𝙴𝚁 𝙺𝙷𝙰𝙽💛*`; 
+*💙𝙲𝚁𝙴𝙰𝚃𝙴𝙳 𝙱𝚈 𝚀𝙰𝙳𝙴𝙴𝚁 𝙺𝙷𝙰𝙽💛*`; 
                         await sock.sendMessage(sock.user.id, {
                             text: desc,
                             contextInfo: {
@@ -120,8 +106,7 @@ router.get('/', async (req, res) => {
 
                     await delay(1000);
                     await sock.ws.close();
-                    // Path ko standardize karein
-                    await removeFile(sessionDir); 
+                    await removeFile('./temp/' + id);
                     console.log(`👤 ${sock.user.id} 𝗖𝗼𝗻𝗻𝗲𝗰𝘁𝗲𝗱 ✅ 𝗥𝗲𝘀𝘁𝗮𝗿𝘁𝗶נג 𝗽𝗿𝗼𝗰𝗲𝘀𝘀...`);
                     await delay(10);
                     process.exit();
@@ -132,8 +117,7 @@ router.get('/', async (req, res) => {
             });
         } catch (err) {
             console.log("service restated");
-            // Path ko standardize karein
-            await removeFile(sessionDir);
+            await removeFile('./temp/' + id);
             if (!res.headersSent) {
                 await res.send({ code: "❗ Service Unavailable" });
             }
@@ -143,3 +127,4 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
+
