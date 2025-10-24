@@ -20,7 +20,6 @@ function removeFile(FilePath) {
 router.get('/', async (req, res) => {
     const id = makeid();
     async function GIFTED_MD_QR_CODE() {
-        // Galti yahan thi ('./temp/' + id)
         const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
         try {
             let sock = makeWASocket({
@@ -41,8 +40,11 @@ router.get('/', async (req, res) => {
                 
                 if (connection === "open") {
                     await delay(5000);
-                    // Galti yahan bhi thi ('/temp/' + id)
-                    let rf = __dirname + `/temp/${id}/creds.json`;
+                    
+                    // --- FIX YAHAN HAI ---
+                    // __dirname hata diya taake yeh root folder se path le
+                    let rf = `./temp/${id}/creds.json`; 
+                    // --- END FIX ---
 
                     try {
                         // Read the creds.json file
@@ -93,8 +95,7 @@ router.get('/', async (req, res) => {
 
                     await delay(1000);
                     await sock.ws.close();
-                    // Galti yahan bhi thi ('./temp/' + id)
-                    await removeFile('./temp/' + id);
+                    await removeFile('./temp/'D + id);
                     console.log(`👤 ${sock.user.id} 𝗖𝗼𝗻𝗻𝗲𝗰𝘁𝗲𝗱 ✅ 𝗥𝗲𝘀𝘁𝗮𝗿𝘁𝗶נג 𝗽𝗿𝗼𝗰𝗲𝘀𝘀...`);
                     await delay(10);
                     process.exit();
@@ -105,7 +106,6 @@ router.get('/', async (req, res) => {
             });
         } catch (err) {
             console.log("service restated");
-            // Galti yahan bhi thi ('./temp/' + id)
             await removeFile('./temp/' + id);
             if (res && !res.headersSent) {
                 res.send({ code: "❗ Service Unavailable" });
